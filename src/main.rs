@@ -2,6 +2,8 @@ mod preprocessor;
 use std::io;
 use std::path::Path;
 
+use crate::preprocessor::image_formatter::FormatImg;
+
 fn file_exists(path: &str) -> bool {
     Path::new(path).exists()
 }
@@ -11,20 +13,20 @@ fn file_exists(path: &str) -> bool {
 
 fn main() {
     let arg: Vec<String> = std::env::args().collect();
-    let img_path: String;
+    let input_img_path: String;
 
     // add path
     if arg.len() > 1 {
-        img_path = arg[1].clone();
+        input_img_path = arg[1].clone();
     } else {
         println!(
             "You didn't open the file using this script, move the image to the terminal window or specify the path to the image yourself."
         );
-        img_path = add_img_path();
+        input_img_path = add_img_path();
     }
 
     // path check
-    if file_exists(&img_path) {
+    if file_exists(&input_img_path) {
         println!("Success: file found")
     } else {
         println!("Error: file not found")
@@ -32,28 +34,36 @@ fn main() {
 
     // input
     println!("Select width (20 - 400) [default: '80']:");
-    let mut width: u16 = get_user_input_int("width");
+    let mut input_width: u16 = get_user_input_int("width");
     println!("Invert image? [Y/N] [default: 'N']:");
-    let mut invert: bool = get_user_input_bool();
+    let mut input_invert: bool = get_user_input_bool();
     println!(
         "Set contrast level (Enter your value as x*100, e.g., 15 for 0.15 contrast) [default: '100']:"
     );
-    let mut contrast: u16 = get_user_input_int("contrast");
+    let mut input_contrast: u16 = get_user_input_int("contrast");
     println!(
         "Set brightness (Enter your value as x*100, e.g., 15 for 0.15 brightness, default 100):"
     );
-    let mut brightness: u16 = get_user_input_int("brightness");
+    let mut input_brightness: u16 = get_user_input_int("brightness");
 
     // replacement input
-    println!("Width: {width}, invert: {invert}, contrast: {contrast}, brightness: {brightness}");
+    println!("Width: {input_width}, invert: {input_invert}, contrast: {input_contrast}, brightness: {input_brightness}");
     println!("Change any settings? [Y/N] [default: 'N']:");
 
     // solution werification
     if get_user_input_bool() == true {
-        (width, invert, contrast, brightness) =
-            replace_parametrs(width, invert, contrast, brightness);
+        (input_width, input_invert, input_contrast, input_brightness) =
+            replace_parametrs(input_width, input_invert, input_contrast, input_brightness);
     }
-    println!("Width: {width}, invert: {invert}, contrast: {contrast}, brightness: {brightness}");
+    println!("Width: {input_width}, invert: {input_invert}, contrast: {input_contrast}, brightness: {input_brightness}");
+    
+    let result = FormatImg {
+        path: input_img_path,
+        width: input_width,
+        invert: input_invert,
+        contrast: input_contrast,
+        brightness: input_brightness,
+        };
 }
 
 fn replace_parametrs(
