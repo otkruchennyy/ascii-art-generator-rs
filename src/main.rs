@@ -12,7 +12,8 @@ fn file_exists(path: &str) -> bool {
 fn main() {
     let arg: Vec<String> = std::env::args().collect();
     let img_path: String;
-    //
+
+    // add path
     if arg.len() > 1 {
         img_path = arg[1].clone();
     } else {
@@ -21,13 +22,15 @@ fn main() {
         );
         img_path = add_img_path();
     }
-    //
+
+    // path check
     if file_exists(&img_path) {
         println!("Success: file found")
     } else {
         println!("Error: file not found")
     }
-    //
+
+    // input
     println!("Select width (20 - 400) [default: '80']:");
     let mut width: u16 = get_user_input_int("width");
     println!("Invert image? [Y/N] [default: 'N']:");
@@ -40,10 +43,12 @@ fn main() {
         "Set brightness (Enter your value as x*100, e.g., 15 for 0.15 brightness, default 100):"
     );
     let mut brightness: u16 = get_user_input_int("brightness");
-    //
+
+    // replacement input
     println!("Width: {width}, invert: {invert}, contrast: {contrast}, brightness: {brightness}");
     println!("Change any settings? [Y/N] [default: 'N']:");
-    //
+
+    // solution werification
     if get_user_input_bool() == true {
         (width, invert, contrast, brightness) =
             replace_parametrs(width, invert, contrast, brightness);
@@ -52,6 +57,7 @@ fn main() {
 }
 
 fn replace_parametrs(
+    //* Override the selected parameter
     mut width_new: u16,
     mut invert_new: bool,
     mut contrast_new: u16,
@@ -66,20 +72,24 @@ fn replace_parametrs(
     let choise = get_user_input_int("replace_parametrs");
     match choise {
         1 => {
+            // Width
             println!("Select width (20 - 400) [default: '80']:");
             width_new = get_user_input_int("width");
         }
         2 => {
+            // Invert
             println!("Invert image? [Y/N] [default: 'N']:");
             invert_new = get_user_input_bool();
         }
         3 => {
+            // Contrast
             println!(
                 "Set contrast level (Enter your value as x*100, e.g., 15 for 0.15 contrast) [default: '100']:"
             );
             contrast_new = get_user_input_int("contrast");
         }
         4 => {
+            // Brightness
             println!(
                 "Set brightness (Enter your value as x*100, e.g., 15 for 0.15 brightness, default 100):"
             );
@@ -93,6 +103,7 @@ fn replace_parametrs(
     );
     println!("Change any settings? [Y/N] [default: 'N']:");
 
+    // Recalling on a Satisfying Condition
     if get_user_input_bool() == true {
         let result: (u16, bool, u16, u16) =
             replace_parametrs(width_new, invert_new, contrast_new, brightness_new);
@@ -103,6 +114,7 @@ fn replace_parametrs(
 }
 
 fn get_user_input_int(msg: &str) -> u16 {
+    //* Get an integer from user
     let mut result = String::new();
     io::stdin()
         .read_line(&mut result)
@@ -164,6 +176,7 @@ fn get_user_input_int(msg: &str) -> u16 {
 }
 
 fn get_user_input_bool() -> bool {
+    //* Get an bool from user
     let mut result = String::new();
     io::stdin()
         .read_line(&mut result)
@@ -184,11 +197,14 @@ fn get_user_input_bool() -> bool {
 }
 
 fn add_img_path() -> String {
+    //* Get img path from user
     let mut result = String::new();
     io::stdin()
         .read_line(&mut result)
         .expect("Failed to read line");
+
     result = result.trim().to_string();
+
     if file_exists(&result) {
         result
     } else {
