@@ -1,11 +1,8 @@
-use image::DynamicImage;
-
-pub struct ProcessedImage {
-    pub data: Vec<u8>,
-    pub width: u32,
-    pub height: u32,
+pub mod image_formatter {}
+struct image_formatter {
+    width: u16,
+    invert: u16,
+    contrast: u16,
+    brightness: u16,
 }
-
-pub fn load_and_format(path: &str) -> Result<ProcessedImage, String> {
-    todo!()
-}
+impl image_formatter {}
