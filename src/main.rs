@@ -1,6 +1,7 @@
 mod preprocessor;
 use std::io;
 use std::path::Path;
+use dirs::desktop_dir;
 
 use crate::preprocessor::image_formatter::FormatImg;
 
@@ -61,9 +62,24 @@ fn main() {
         path: &input_img_path,
         invert: &input_invert,
     };
-    let img = image_formater.process();
-
+    
+    // Unpacking the Result with an error message
+    let img = image_formater.process()
+        .expect("Image processing error");
+    
+    // get path to desktop
+    let desktop = desktop_dir()
+        .expect("Image could not be saved");
+    
+    let output_path = desktop.join("formatted_image.png");
+    
+    // Save img
+    img.save(&output_path)
+        .expect("Image could not be saved");
+    
+    println!("Сохранено в: {}", output_path.display());
 }
+
 
 fn replace_parametrs(
     //* Override the selected parameter
