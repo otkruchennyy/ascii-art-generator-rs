@@ -57,13 +57,12 @@ fn main() {
     }
     println!("Width: {input_width}, invert: {input_invert}, contrast: {input_contrast}, brightness: {input_brightness}");
     
-    let result = FormatImg {
-        path: input_img_path,
-        width: input_width,
-        invert: input_invert,
-        contrast: input_contrast,
-        brightness: input_brightness,
-        };
+    let image_formater = FormatImg {
+        path: &input_img_path,
+        invert: &input_invert,
+    };
+    let img = image_formater.process();
+
 }
 
 fn replace_parametrs(
