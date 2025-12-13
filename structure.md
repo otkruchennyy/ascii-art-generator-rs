@@ -1,0 +1,19 @@
+ascii_art/
+├── Cargo.toml
+├── Cargo.lock
+└── src/
+    ├── main.rs     Точка входа
+    ├── ascii/              Генерация ascii
+    │   ├── mod.rs
+    │   ├──  ...
+    │   └──  ...
+    ├── cli/                Интерфейс командной строки
+    │   ├── mod.rs
+    │   ├──  ...
+    │   └──  ...
+    ├── config/             Конфиг
+    │   ├── mod.rs
+    │   └──  ...
+    └── image_processor/    Преобразование фотографии
+        ├── mod.rs
+        └──  ...
