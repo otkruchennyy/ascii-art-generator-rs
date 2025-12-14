@@ -84,7 +84,24 @@ pub fn get_user_input_bool() -> bool {
     }
 }
 
-pub fn add_img_path() -> String {
+pub fn load_img_path(arg: Vec<String>) -> String{
+    if arg.len() >= 2{
+        let path = arg[1].to_lowercase();
+        if img_path_exists(&path) && file_exists(&path) { path }
+        else {
+            println!("The file '{}' is not a supported image format or file not found.", arg[1]);
+            println!("Provide a .PNG, .JPG or .JPEG file.");
+            add_img_path()
+        }
+    } else {
+            println!(
+                "You didn't open the file using the script. Please enter the path to a .PNG, .JPG, or .JPEG image manually."
+            );
+            add_img_path()
+        }
+}
+
+fn add_img_path() -> String {
     //* Get img path from user
     let mut result = String::new();
     stdin()
@@ -93,7 +110,7 @@ pub fn add_img_path() -> String {
 
     result = result.trim().to_string();
 
-    if file_exists(&result) && img_path_exists(path) {
+    if img_path_exists(&result) && file_exists(&result) {
         result
     } else {
         println!("Error: file not found");
@@ -101,12 +118,92 @@ pub fn add_img_path() -> String {
     }
 }
 
-fn img_path_exists(path: &str) -> bool{
-    ( path.len() >= 4 && path[path.len()-4..] == ".png".to_string() ) ||
-    ( path[path.len()-4..] == ".jpg".to_string() ) ||
-    ( path.len() >= 5 && path[path.len()-5..] == ".jpeg".to_string() )
+fn img_path_exists(path: &str) -> bool {
+    let len = path.len();
+    
+    (len >= 4 && &path[len-4..] == ".png") ||
+    (len >= 4 && &path[len-4..] == ".jpg") ||
+    (len >= 5 && &path[len-5..] == ".jpeg")
 }
 
-pub fn file_exists(path: &str) -> bool {
+fn file_exists(path: &str) -> bool {
     Path::new(path).exists()
+}
+
+pub fn value_swap(path: &String, width: &u16, invert: &bool, contrast: &u16, brightness: &u16) -> (String, u16, bool, u16, u16){
+    let mut path: String = path.to_string();
+    let mut width: u16 = *width;
+    let mut invert: bool= *invert;
+    let mut contrast: u16= *contrast;
+    let mut brightness: u16 = *brightness;
+
+
+    println!("Choose a setting");
+    println!("( 1 ) Image path");
+    println!("( 2 ) Width");
+    println!("( 3 ) Invert image");
+    println!("( 4 ) Contrast level");
+    println!("( 5 ) brightness");
+    println!("( ENTER ) pass");
+
+    let choise = get_user_input_int("replace_parametrs");
+
+    match choise {
+        1 => {
+            fn input() -> String {
+                let mut path: String = String::new();
+                stdin()
+                    .read_line(&mut path)
+                    .expect("Failed to read line");
+                path = path.trim().to_string();
+
+                if file_exists(&path) && img_path_exists(&path) {
+                    path = path.trim().to_string()
+                } else {
+                    println!("Incorrect path, enter again.");
+                    input();
+                }
+            path
+            }
+
+            println!("Enter image path [press ENTER to use current path]:");
+            let mut new_path: String = String::new();
+            stdin()
+                .read_line(&mut new_path)
+                .expect("Failed to read line");
+            new_path = new_path.trim().to_string();
+            if new_path.is_empty() { new_path = path}
+
+            if file_exists(&new_path) == false || img_path_exists(&new_path) == false {
+                println!("Incorrect path, enter again.");
+                input();
+            }
+            path = new_path.trim().to_string()
+        }
+
+        2 => {
+            println!("Select width (20 - 400) [default: '80']:");
+            width = get_user_input_int("width")
+        }
+        3 => {
+            println!("Invert image? [Y/N] [default: 'N']:");
+            invert = get_user_input_bool()
+        }
+        4 => {
+            println!("Set contrast level (Enter your value as x*100, e.g., 15 for 0.15 contrast) [default: '100']:");
+            contrast = get_user_input_int("contrast")
+        }
+        5 => {
+            println!("Set brightness (Enter your value as x*100, e.g., 15 for 0.15 brightness, default 100):");
+            brightness = get_user_input_int("brightness")
+        }
+        _ => return (path.to_string(), width, invert, contrast, brightness),
+    }
+
+    println!("Change any settings? [Y/N] [default: 'N']:");
+    if get_user_input_bool() == true {
+        (path, width, invert, contrast, brightness) = value_swap(&path, &width, &invert, &contrast, &brightness)
+    }
+
+    (path.to_string(), width, invert, contrast, brightness)
 }
