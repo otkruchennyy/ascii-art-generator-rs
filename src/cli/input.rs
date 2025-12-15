@@ -46,8 +46,8 @@ pub fn get_user_input_int(msg: &str) -> u16 {
                 }
             }
             "replace_parametrs" => {
-                if num > 4 {
-                    println!("You can choose from 1 to 4");
+                if num > 5 {
+                    println!("You can choose from 1 to 5");
                     get_user_input_int(msg)
                 } else {
                     num
