@@ -1,8 +1,8 @@
-use std::path::Path;
 use std::io::stdin;
+use crate::helpers::utils;
 
 pub fn get_user_input_int(msg: &str) -> u16 {
-    //* Get an integer from user
+    // Get an integer from user
     let mut result = String::new();
     stdin()
         .read_line(&mut result)
@@ -64,7 +64,7 @@ pub fn get_user_input_int(msg: &str) -> u16 {
 }
 
 pub fn get_user_input_bool() -> bool {
-    //* Get an bool from user
+    // Get an bool from user
     let mut result = String::new();
     stdin()
         .read_line(&mut result)
@@ -87,7 +87,7 @@ pub fn get_user_input_bool() -> bool {
 pub fn load_img_path(arg: Vec<String>) -> String{
     if arg.len() >= 2{
         let path = arg[1].to_lowercase();
-        if img_path_exists(&path) && file_exists(&path) { path }
+        if utils::img_path_exists(&path) && utils::file_exists(&path) { path }
         else {
             println!("The file '{}' is not a supported image format or file not found.", arg[1]);
             println!("Provide a .PNG, .JPG or .JPEG file.");
@@ -110,24 +110,12 @@ fn add_img_path() -> String {
 
     result = result.trim().to_string();
 
-    if img_path_exists(&result) && file_exists(&result) {
+    if utils::img_path_exists(&result) && utils::file_exists(&result) {
         result
     } else {
         println!("Error: file not found");
         add_img_path()
     }
-}
-
-fn img_path_exists(path: &str) -> bool {
-    let len = path.len();
-    
-    (len >= 4 && &path[len-4..] == ".png") ||
-    (len >= 4 && &path[len-4..] == ".jpg") ||
-    (len >= 5 && &path[len-5..] == ".jpeg")
-}
-
-fn file_exists(path: &str) -> bool {
-    Path::new(path).exists()
 }
 
 pub fn value_swap(path: &String, width: &u16, invert: &bool, contrast: &u16, brightness: &u16) -> (String, u16, bool, u16, u16){
@@ -157,7 +145,7 @@ pub fn value_swap(path: &String, width: &u16, invert: &bool, contrast: &u16, bri
                     .expect("Failed to read line");
                 path = path.trim().to_string();
 
-                if file_exists(&path) && img_path_exists(&path) {
+                if utils::file_exists(&path) && utils::img_path_exists(&path) {
                     path = path.trim().to_string()
                 } else {
                     println!("Incorrect path, enter again.");
@@ -174,7 +162,7 @@ pub fn value_swap(path: &String, width: &u16, invert: &bool, contrast: &u16, bri
             new_path = new_path.trim().to_string();
             if new_path.is_empty() { new_path = path}
 
-            if file_exists(&new_path) == false || img_path_exists(&new_path) == false {
+            if utils::file_exists(&new_path) == false || utils::img_path_exists(&new_path) == false {
                 println!("Incorrect path, enter again.");
                 input();
             }

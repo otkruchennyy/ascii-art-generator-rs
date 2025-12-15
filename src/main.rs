@@ -1,6 +1,8 @@
 mod cli;
+mod helpers;
 
 use cli::input;
+use helpers::utils;
 
 const LINE: &str = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
 fn line() {
