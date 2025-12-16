@@ -102,7 +102,7 @@ pub fn load_img_path(arg: Vec<String>) -> String{
 }
 
 fn add_img_path() -> String {
-    //* Get img path from user
+    // Get img path from user
     let mut result = String::new();
     stdin()
         .read_line(&mut result)

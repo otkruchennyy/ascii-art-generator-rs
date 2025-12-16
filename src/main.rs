@@ -2,7 +2,6 @@ mod cli;
 mod helpers;
 
 use cli::input;
-use helpers::utils;
 
 const LINE: &str = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
 fn line() {
@@ -10,6 +9,18 @@ fn line() {
 }
 fn space() {
     println!("\n");
+}
+
+fn output(img_path: &String, width: &u16, invert: &bool, contrast: &u16, brightness: &u16) {
+    space();
+    line();
+    // replacement input
+    println!("Image path: {img_path}");
+    println!("Width: {width}");
+    println!("invert: {invert}");
+    println!("contrast: {contrast}");
+    println!("brightness: {brightness}");
+    line();
 }
 
 fn main() {
@@ -29,27 +40,12 @@ fn main() {
     println!("Set brightness (Enter your value as x*100, e.g., 15 for 0.15 brightness, default 100):");
     let mut brightness: u16 = input::get_user_input_int("brightness");
 
-    space();
-    line();
-    // replacement input
-    println!("Image path: {img_path}");
-    println!("Width: {width}");
-    println!("invert: {invert}");
-    println!("contrast: {contrast}");
-    println!("brightness: {brightness}");
-    line();
-    space();
+    output(&img_path, &width, &invert, &contrast, &brightness);
 
     // solution werification
     println!("Change any settings? [Y/N] [default: 'N']:");
     if input::get_user_input_bool() == true {
         (img_path, width, invert, contrast, brightness) = input::value_swap(&img_path, &width, &invert, &contrast, &brightness)
     }
-    line();
-    println!("Image path: {img_path}");
-    println!("Width: {width}");
-    println!("invert: {invert}");
-    println!("contrast: {contrast}");
-    println!("brightness: {brightness}");
-    line();
+    output(&img_path, &width, &invert, &contrast, &brightness);
 }
